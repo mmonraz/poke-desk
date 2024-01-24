@@ -1,0 +1,10 @@
+<div (click)="showPokemonDetails()">
+    <div>
+        <img src="{{pokemon.sprite}}" />
+    </div>
+    <div class="card-body">
+        <p><strong>Name: </strong> {{pokemon.name | uppercase}}</p>
+        <p><strong>Id: </strong> {{pokemon.id}} </p>
+        <p *ngIf="pokemon.forms_switchable"><strong>Forms switchable:</strong> {{pokemon.forms_switchable}} </p>
+    </div>
+</div>
