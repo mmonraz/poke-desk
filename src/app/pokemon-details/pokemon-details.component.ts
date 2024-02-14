@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { PokemonService } from '../services/pokemon.service';
 import { ActivatedRoute } from '@angular/router';
 import { Pokemon } from '../model/Pokemon';
+import { PokemonDetailsResponse } from '../interfaces/pokemon.interfaces';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -15,12 +16,14 @@ import { Pokemon } from '../model/Pokemon';
   styleUrl: './pokemon-details.component.css'
 })
 export class PokemonDetailsComponent {
-  pokemonId:  number;
-  pokemon: Pokemon;
+  pokemonName:  string;
+  pokemon: PokemonDetailsResponse;
   route: ActivatedRoute = inject(ActivatedRoute);
  
   constructor(private pokemonService:PokemonService){
-    this.pokemonId = Number(this.route.snapshot.params['id']);
-    this.pokemon = pokemonService.getPokemonById(this.pokemonId);
+    this.pokemonName = this.route.snapshot.params['name'];
+    pokemonService.getPokemonByName(this.pokemonName).subscribe(response => {
+       this.pokemon = response
+    });
   }
 }

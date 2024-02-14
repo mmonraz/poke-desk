@@ -18,6 +18,6 @@ export class PokemonCardComponent {
   }
 
   showPokemonDetails() {
-    this.router.navigateByUrl(`/pokemons/${this.pokemon.id}`);
+    this.router.navigateByUrl(`/pokemons/${this.pokemon.name}`);
   }
 }
