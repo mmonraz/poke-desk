@@ -4,7 +4,7 @@ import { PokemonDetailsResponse, PokemonListResponse } from '../interfaces/pokem
 import { Observable } from 'rxjs';
 
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class PokemonService {
   private baseUrl: string = 'https://pokeapi.co/api/v2/';
 
