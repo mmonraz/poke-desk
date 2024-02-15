@@ -1,20 +1,24 @@
 import { Injectable } from '@angular/core';
-import { Pokemon } from '../model/Pokemon';
-import pokemonData from '../../assets/pokemons.json';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { PokemonDetailsResponse, PokemonListResponse } from '../interfaces/pokemon.interfaces';
+import { Observable } from 'rxjs';
 
-@Injectable()
+
+@Injectable({providedIn: 'root'})
 export class PokemonService {
-  private pokemons:Pokemon[] = [];
+  private baseUrl: string = 'https://pokeapi.co/api/v2/';
 
-  constructor() { 
-    this.pokemons = pokemonData;
+  constructor(private http: HttpClient) { 
   }
 
-  getAllPokemons() {
-    return this.pokemons;
+  getAllPokemons(): Observable<PokemonListResponse> {
+    const params = new HttpParams()
+      .set('limit', 10)
+    return this.http.get<PokemonListResponse>(`${this.baseUrl}pokemon`, { params });
   }
 
-  getPokemonById(id:number):Pokemon {
-    return this.pokemons.filter(pokemon => pokemon.id === id)[0];
+  getPokemonByName(name:string):Observable<PokemonDetailsResponse> {
+    return this.http.get<PokemonDetailsResponse>(`${this.baseUrl}pokemon/${name}`)
+
   }
 }

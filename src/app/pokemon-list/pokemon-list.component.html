@@ -1,5 +1,24 @@
-<div class="container">
-    <div class="row">
-        <pokemon-card ngClass="col-4" *ngFor="let pokemon of pokemons;" [pokemon]="pokemon" />
+<div
+  *ngIf="!shouldShowDetails; else cardDetails">
+
+  <div
+    (click)="showDetails(pokemon.name)"
+    *ngFor="let pokemon of pokemons"
+    >
+    <div>
+
+      <div>
+        <p>
+          {{ pokemon.name }}
+        </p>
+      </div>
+
     </div>
+  </div>
 </div>
+
+  <ng-template #cardDetails>
+    <app-pokemon-details
+      (onBackToListEmitter)="onBackToList($event)"
+      [pokemonName]="pokemonName"></app-pokemon-details>
+  </ng-template>

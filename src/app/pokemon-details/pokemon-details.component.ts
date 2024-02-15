@@ -1,26 +1,39 @@
-import { Component, inject } from '@angular/core';
-import { DecimeterPipe } from '../pipes/decimeter.pipe';
-import { HectogramPipe } from '../pipes/hectogram.pipe';
-import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { PokemonService } from '../services/pokemon.service';
-import { ActivatedRoute } from '@angular/router';
-import { Pokemon } from '../model/Pokemon';
+import { PokemonDetailsResponse } from '../interfaces/pokemon.interfaces';
 
 @Component({
   selector: 'app-pokemon-details',
-  standalone: true,
-  imports: [DecimeterPipe, HectogramPipe, CommonModule],
   providers: [PokemonService],
   templateUrl: './pokemon-details.component.html',
   styleUrl: './pokemon-details.component.css'
 })
-export class PokemonDetailsComponent {
-  pokemonId:  number;
-  pokemon: Pokemon;
-  route: ActivatedRoute = inject(ActivatedRoute);
- 
-  constructor(private pokemonService:PokemonService){
-    this.pokemonId = Number(this.route.snapshot.params['id']);
-    this.pokemon = pokemonService.getPokemonById(this.pokemonId);
+export class PokemonDetailsComponent implements OnChanges {
+  @Input()
+  pokemonName?: string;
+
+  private _pokemonDetails?: PokemonDetailsResponse;
+
+  @Output()
+  public onBackToListEmitter: EventEmitter<boolean> = new EventEmitter();
+
+  constructor(private pokemonService: PokemonService){}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
+    this.pokemonService.getPokemonByName(this.pokemonName?.toLowerCase() || '')
+      .subscribe(response => {
+        this._pokemonDetails = response;
+        console.log("pokemon details: ", this._pokemonDetails);
+      })
   }
+
+  get pokemon(): PokemonDetailsResponse | undefined {
+    return this._pokemonDetails;
+  }
+
+  backToList(){
+    this.onBackToListEmitter.emit(false);
+  }
+
 }
